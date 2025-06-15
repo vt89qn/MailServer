@@ -2,7 +2,7 @@
 
 namespace MailServer.Mail;
 
-public class SmtpService(IServiceProvider serviceProvider, ILogger<SmtpService> logger) : IHostedService
+public class MailService(IServiceProvider serviceProvider, ILogger<MailService> logger) : IHostedService
 {
 	private SmtpServer.SmtpServer smtpServer;
 	public Task StartAsync(CancellationToken cancellationToken)

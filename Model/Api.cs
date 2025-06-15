@@ -32,9 +32,9 @@ public class ApiResponseModel<T>
 }
 public class ApiEmailGetResponseModel
 {
-	public string From { get; set; }
-	public string To { get; set; }
+	public List<string> From { get; set; }
+	public List<string> To { get; set; }
 	public string TextBody { get; set; }
 	public string HtmlBody { get; set; }
-	public DateTime RecvDate { get; set; }
+	public string RecvDate { get; set; }
 }

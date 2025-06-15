@@ -20,8 +20,10 @@ builder.Services.Configure<JsonOptions>(configure =>
 });
 
 builder.Services.AddMemoryCache();
-builder.Services.AddSingleton<IMessageStore, CacheMessageStore>()
-				.AddSingleton<IHostedService, SmtpService>();
+builder.Services.AddSingleton<MailStore>()
+				.AddSingleton<IMessageStore>(x => x.GetRequiredService<MailStore>())
+				.AddSingleton<IHostedService>(x => x.GetRequiredService<MailStore>())
+				.AddSingleton<IHostedService, MailService>();
 
 var app = builder.Build();
 

@@ -6,28 +6,24 @@ public class MailMessage
 {
 	public MailMessage()
 	{
+		From = [];
+		To = [];
 	}
-	public MailMessage(MimeMessage message) : this()
+	public MailMessage(MimeMessage mimeMessage) : this()
 	{
-		Message = message;
-		if (message.To.FirstOrDefault() is MailboxAddress to)
-		{
-			To = to.Address;
-		}
-		if (message.From.FirstOrDefault() is MailboxAddress from)
-		{
-			From = from.Address;
-		}
-		To = message.To.ToString();
-		TextBody = message.TextBody;
-		HtmlBody = message.HtmlBody;
-		RecvDate = DateTime.UtcNow;
+		To.AddRange(mimeMessage.To.OfType<MailboxAddress>().Select(x => x.Address));
+		From.AddRange(mimeMessage.From.OfType<MailboxAddress>().Select(x => x.Address));
+		MimeMessage = mimeMessage;
+
+		TextBody = mimeMessage.TextBody;
+		HtmlBody = mimeMessage.HtmlBody;
+		RecvDate = DateTime.Now;
 	}
 
-	public string From { get; set; }
-	public string To { get; set; }
+	public List<string> From { get; set; }
+	public List<string> To { get; set; }
 	public string TextBody { get; set; }
 	public string HtmlBody { get; set; }
 	public DateTime RecvDate { get; set; }
-	public MimeMessage Message { get; set; }
+	public MimeMessage MimeMessage { get; set; }
 }
