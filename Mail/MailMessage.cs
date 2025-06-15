@@ -14,16 +14,11 @@ public class MailMessage
 		To.AddRange(mimeMessage.To.OfType<MailboxAddress>().Select(x => x.Address));
 		From.AddRange(mimeMessage.From.OfType<MailboxAddress>().Select(x => x.Address));
 		MimeMessage = mimeMessage;
-
-		TextBody = mimeMessage.TextBody;
-		HtmlBody = mimeMessage.HtmlBody;
 		RecvDate = DateTime.Now;
 	}
 
 	public List<string> From { get; set; }
 	public List<string> To { get; set; }
-	public string TextBody { get; set; }
-	public string HtmlBody { get; set; }
 	public DateTime RecvDate { get; set; }
 	public MimeMessage MimeMessage { get; set; }
 }

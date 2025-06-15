@@ -24,11 +24,12 @@ static class Email
 
 			response.Data = messages.Select(x => new ApiEmailGetResponseModel
 			{
+				Subject = x.MimeMessage.Subject,
 				From = x.From,
 				To = x.To,
-				HtmlBody = x.HtmlBody,
+				HtmlBody = x.MimeMessage.HtmlBody,
 				RecvDate = x.RecvDate.ToDateTimeString(),
-				TextBody = x.TextBody,
+				TextBody = x.MimeMessage.TextBody,
 			}).ToList();
 		}
 		catch (Exception ex)

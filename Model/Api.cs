@@ -32,6 +32,7 @@ public class ApiResponseModel<T>
 }
 public class ApiEmailGetResponseModel
 {
+	public string Subject { get; set; }
 	public List<string> From { get; set; }
 	public List<string> To { get; set; }
 	public string TextBody { get; set; }
