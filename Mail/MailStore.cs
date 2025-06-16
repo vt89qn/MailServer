@@ -1,4 +1,6 @@
-﻿using MimeKit;
+﻿using MailServer.Model;
+using Microsoft.AspNetCore.SignalR;
+using MimeKit;
 using SmtpServer;
 using SmtpServer.Protocol;
 using SmtpServer.Storage;
@@ -7,7 +9,7 @@ using System.Collections.Concurrent;
 
 namespace MailServer.Mail;
 
-public class MailStore(ILogger<MailStore> logger) : IMessageStore, IHostedService
+public class MailStore(IHubContext<MailHub, IMailHubClient> hubContext, ILogger<MailStore> logger) : IMessageStore, IHostedService
 {
 	private ConcurrentBag<MailMessage> mailMessages = [];
 	private Timer timerCleanup;
@@ -26,7 +28,15 @@ public class MailStore(ILogger<MailStore> logger) : IMessageStore, IHostedServic
 		var message = await MimeMessage.LoadAsync(stream, cancellationToken);
 		var mailMessage = new MailMessage(message);
 		mailMessages.Add(mailMessage);
-		logger.LogInformation("{From}->{To} : {Subject}", string.Join(", ", mailMessage.From), string.Join(", ", mailMessage.To), message.Subject);
+
+
+		var tasks = mailMessage.To
+		.Select(address =>
+			hubContext.Clients.Group(address.ToLower()).ReceiveEmail(new ApiEmailGetResponseModel(mailMessage))
+		);
+		await Task.WhenAll(tasks);
+
+		logger.LogInformation("{From}->{To} : {Subject}", mailMessage.From, string.Join(", ", mailMessage.To), mailMessage.Subject);
 
 		return SmtpResponse.Ok;
 	}
@@ -42,7 +52,7 @@ public class MailStore(ILogger<MailStore> logger) : IMessageStore, IHostedServic
 
 		if (!string.IsNullOrEmpty(from))
 		{
-			query = query.Where(m => m.From.Any(f => f.Equals(from, StringComparison.OrdinalIgnoreCase)));
+			query = query.Where(m => m.From.Equals(from, StringComparison.OrdinalIgnoreCase));
 		}
 
 		return query;

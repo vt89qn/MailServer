@@ -1,5 +1,4 @@
-﻿using MailServer.Common;
-using MailServer.Mail;
+﻿using MailServer.Mail;
 using MailServer.Model;
 using System.Net;
 namespace MailServer.Enpoint;
@@ -10,6 +9,9 @@ static class Email
 	{
 		var group = app.MapGroup("email");
 		group.MapGet("/", get);
+
+		group.MapHub<MailHub>("/hub");
+
 	}
 	private static IResult get(MailStore mailStore, ILogger<WebApplication> logger, HttpContext context)
 	{
@@ -22,15 +24,7 @@ static class Email
 
 			var messages = mailStore.GetMessages(to, from);
 
-			response.Data = messages.Select(x => new ApiEmailGetResponseModel
-			{
-				Subject = x.MimeMessage.Subject,
-				From = x.From,
-				To = x.To,
-				HtmlBody = x.MimeMessage.HtmlBody,
-				RecvDate = x.RecvDate.ToDateTimeString(),
-				TextBody = x.MimeMessage.TextBody,
-			}).ToList();
+			response.Data = messages.Select(x => new ApiEmailGetResponseModel(x)).ToList();
 		}
 		catch (Exception ex)
 		{

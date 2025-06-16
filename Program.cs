@@ -19,13 +19,17 @@ builder.Services.Configure<JsonOptions>(configure =>
 	configure.SerializerOptions.PropertyNameCaseInsensitive = true;
 });
 
-builder.Services.AddMemoryCache();
+
+builder.Services.AddSignalR();
+
 builder.Services.AddSingleton<MailStore>()
 				.AddSingleton<IMessageStore>(x => x.GetRequiredService<MailStore>())
 				.AddSingleton<IHostedService>(x => x.GetRequiredService<MailStore>())
 				.AddSingleton<IHostedService, MailService>();
 
 var app = builder.Build();
+
+app.UseDefaultFiles();
 
 app.MapEmail();
 

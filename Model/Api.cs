@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using MailServer.Common;
+using MailServer.Mail;
+using System.Net;
 
 namespace MailServer.Model;
 
@@ -32,8 +34,19 @@ public class ApiResponseModel<T>
 }
 public class ApiEmailGetResponseModel
 {
+	public ApiEmailGetResponseModel(MailMessage mailMessage)
+	{
+		Id = mailMessage.Id;
+		Subject = mailMessage.Subject;
+		From = mailMessage.From;
+		To = mailMessage.To;
+		HtmlBody = mailMessage.MimeMessage.HtmlBody;
+		RecvDate = mailMessage.RecvDate.ToDateTimeString();
+		TextBody = mailMessage.MimeMessage.TextBody;
+	}
+	public string Id { get; set; }
 	public string Subject { get; set; }
-	public List<string> From { get; set; }
+	public string From { get; set; }
 	public List<string> To { get; set; }
 	public string TextBody { get; set; }
 	public string HtmlBody { get; set; }
