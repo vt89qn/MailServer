@@ -30,9 +30,9 @@ builder.Services.AddSingleton<MailStore>()
 var app = builder.Build();
 
 app.UseDefaultFiles();
-
+app.UseStaticFiles();
 app.MapEmail();
 
-app.MapFallback(() => Results.Content("404"));
+//app.MapFallback(() => Results.Content("404"));
 
 app.Run();

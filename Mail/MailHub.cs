@@ -10,7 +10,7 @@ public interface IMailHubClient
 
 public class MailHub : Hub<IMailHubClient>
 {
-	public async Task SubscribeToEmail(string emailAddress)
+	public async Task Subscribe(string emailAddress)
 	{
 		if (string.IsNullOrEmpty(emailAddress))
 		{
@@ -19,7 +19,7 @@ public class MailHub : Hub<IMailHubClient>
 		await Groups.AddToGroupAsync(Context.ConnectionId, emailAddress.ToLower());
 	}
 
-	public async Task UnsubscribeFromEmail(string emailAddress)
+	public async Task Unsubscribe(string emailAddress)
 	{
 		if (string.IsNullOrEmpty(emailAddress))
 		{
