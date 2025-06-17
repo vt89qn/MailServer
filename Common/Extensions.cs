@@ -1,6 +1,8 @@
 ﻿using Serilog;
 using Serilog.Events;
 using System.Globalization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace MailServer.Common;
 
@@ -23,7 +25,16 @@ static class HostBuilderExtensions
 			);
 	}
 }
-
+static class JsonSerializerOptionsExtensions
+{
+	public static JsonSerializerOptions AddDefaultSettings(this JsonSerializerOptions options)
+	{
+		options.PropertyNamingPolicy = null;
+		options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+		options.PropertyNameCaseInsensitive = true;
+		return options;
+	}
+}
 public static class DateTimeExtensions
 {
 	public static string ToDateTimeString(this DateTime dateTime, string format = "yyyy-MM-dd HH:mm:ss")

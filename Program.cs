@@ -3,7 +3,6 @@ using MailServer.Enpoint;
 using MailServer.Mail;
 using Microsoft.AspNetCore.Http.Json;
 using SmtpServer.Storage;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,15 +11,9 @@ builder.Host.UseWindowsService();
 var basePath = builder.Configuration.GetValue<string>("Settings:BasePath");
 builder.Host.AddLog(Path.Combine(basePath, "Logs"));
 
-builder.Services.Configure<JsonOptions>(configure =>
-{
-	configure.SerializerOptions.PropertyNamingPolicy = null;
-	configure.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-	configure.SerializerOptions.PropertyNameCaseInsensitive = true;
-});
+builder.Services.Configure<JsonOptions>(configure => configure.SerializerOptions.AddDefaultSettings());
 
-
-builder.Services.AddSignalR();
+builder.Services.AddSignalR().AddJsonProtocol(options => options.PayloadSerializerOptions.AddDefaultSettings());
 
 builder.Services.AddSingleton<MailStore>()
 				.AddSingleton<IMessageStore>(x => x.GetRequiredService<MailStore>())
