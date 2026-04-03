@@ -8,12 +8,12 @@ static class Email
 	public static void MapEmail(this WebApplication app)
 	{
 		var group = app.MapGroup("email");
-		group.MapGet("/", get);
+		group.MapGet("/", Get);
 
 		group.MapHub<MailHub>("/hub");
 
 	}
-	private static IResult get(MailStore mailStore, ILogger<WebApplication> logger, HttpContext context)
+	private static IResult Get(MailStore mailStore, ILogger<WebApplication> logger, HttpContext context)
 	{
 		var response = new ApiResponseModel<List<ApiEmailGetResponseModel>>();
 		try
@@ -24,7 +24,7 @@ static class Email
 
 			var messages = mailStore.GetMessages(to, from);
 
-			response.Data = messages.Select(x => new ApiEmailGetResponseModel(x)).ToList();
+			response.Data = [.. messages.Select(x => new ApiEmailGetResponseModel(x))];
 		}
 		catch (Exception ex)
 		{

@@ -12,15 +12,16 @@ static class HostBuilderExtensions
 	{
 		return builder.UseSerilog((context, configuration) =>
 			configuration.ReadFrom.Configuration(context.Configuration).Enrich.FromLogContext()
+
 			.MinimumLevel.Debug().MinimumLevel.Override("Microsoft", LogEventLevel.Warning).MinimumLevel.Override("System", LogEventLevel.Warning)
 
-			.WriteTo.Logger(lc => lc.Filter.ByIncludingOnly($"@l = 'Information' and SourceContext <> 'Serilog.AspNetCore.RequestLoggingMiddleware'")
-					.WriteTo.File(path: Path.Combine(logPath, "info-.log"), rollingInterval: RollingInterval.Day, retainedFileCountLimit: 24
+			.WriteTo.Logger(lc => lc.Filter.ByIncludingOnly(e => e.Level == LogEventLevel.Information)
+					.WriteTo.File(path: Path.Combine(logPath, "info-.log"), rollingInterval: RollingInterval.Day, retainedFileCountLimit: 30
 						, outputTemplate: "{Timestamp:HHmmss.fff}	{Message:lj}{NewLine}"))
 
 
-			.WriteTo.Logger(lc => lc.Filter.ByIncludingOnly($"@l in ['Error', 'Warning']")
-							.WriteTo.File(path: Path.Combine(logPath, "error-.log"), rollingInterval: RollingInterval.Day, retainedFileCountLimit: 24
+			.WriteTo.Logger(lc => lc.Filter.ByIncludingOnly(e => e.Level == LogEventLevel.Warning || e.Level == LogEventLevel.Error)
+							.WriteTo.File(path: Path.Combine(logPath, "error-.log"), rollingInterval: RollingInterval.Day, retainedFileCountLimit: 30
 								, outputTemplate: "{Timestamp:HHmmss.fff}	{Message:lj}{NewLine}{Exception}"))
 			);
 	}

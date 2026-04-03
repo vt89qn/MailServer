@@ -1,12 +1,11 @@
 {
+  "$schema": "https://json.schemastore.org/launchsettings.json",
   "profiles": {
-    "EmailServer": {
+    "http": {
       "commandName": "Project",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "https://localhost:52647;http://localhost:52648"
+      "commandLineArgs": "--environment Development --basePath \"D:\\EmailServer\" --urls \"http://*:8102\"",
+      "dotnetRunMessages": true,
+      "launchBrowser": true
     }
   }
 }
