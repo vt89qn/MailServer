@@ -8,7 +8,7 @@ public class MailService(IServiceProvider serviceProvider, ILogger<MailService> 
 	public Task StartAsync(CancellationToken cancellationToken)
 	{
 		var options = new SmtpServerOptionsBuilder()
-			.ServerName("localhost")
+			.ServerName("mail.gsm.vin")
 			.Endpoint(builder => builder.Port(25).IsSecure(false))
 			.Endpoint(builder => builder.Port(587).IsSecure(false))
 		.Build();

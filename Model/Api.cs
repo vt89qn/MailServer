@@ -52,3 +52,44 @@ public class ApiEmailGetResponseModel
 	public string HtmlBody { get; set; }
 	public string RecvDate { get; set; }
 }
+
+public class ApiEmailSendRequestModel
+{
+	public ApiEmailSendRequestModel()
+	{
+		To = [];
+		Cc = [];
+		Bcc = [];
+	}
+
+	public string From { get; set; }
+	public List<string> To { get; set; }
+	public List<string> Cc { get; set; }
+	public List<string> Bcc { get; set; }
+	public string Subject { get; set; }
+	public string TextBody { get; set; }
+	public string HtmlBody { get; set; }
+}
+
+public class ApiEmailSendResponseModel
+{
+	public ApiEmailSendResponseModel()
+	{
+		To = [];
+		Cc = [];
+		Bcc = [];
+	}
+
+	public string From { get; set; }
+	public List<string> To { get; set; }
+	public List<string> Cc { get; set; }
+	public List<string> Bcc { get; set; }
+	public string Subject { get; set; }
+	public string Id { get; set; }
+	public string Status { get; set; }
+	public string QueuedDate { get; set; }
+	public string NextAttemptDate { get; set; }
+	public int AttemptCount { get; set; }
+	public string LastError { get; set; }
+	public string SentDate { get; set; }
+}
